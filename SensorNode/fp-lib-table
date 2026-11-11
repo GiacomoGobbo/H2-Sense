@@ -1,0 +1,10 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "LTC6752") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/ul_LTC6752HMS8-2-PBF/KiCADv6/footprints.pretty") (options "") (descr ""))
+	(lib (name "SMA_J_P_GF_RA_SM1") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/SMA_J_P_GF_RA_SM1") (options "") (descr ""))
+	(lib (name "ABLNO-V-104.000MHZ-T") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/ABLNO-V-104.000MHZ-T") (options "") (descr ""))
+	(lib (name "T93") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/T93YA203JT20/KiCADv6/footprints.pretty") (options "") (descr ""))
+	(lib (name "ERA-6SM_") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/ERA-6SM_") (options "") (descr ""))
+	(lib (name "SCLF") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/SCLF.pretty") (options "") (descr ""))
+	(lib (name "SCLF") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/SCLF/SCLF.pretty") (options "") (descr ""))
+)

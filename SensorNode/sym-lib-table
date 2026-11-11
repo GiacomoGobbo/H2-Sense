@@ -1,0 +1,8 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "LTC6752") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/ul_LTC6752HMS8-2-PBF/KiCADv6/2026-11-08_20-12-27.kicad_sym") (options "") (descr ""))
+	(lib (name "SMA-J-P-GF-RA-SM1") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/SMA_J_P_GF_RA_SM1/SMA-J-P-GF-RA-SM1.kicad_sym") (options "") (descr ""))
+	(lib (name "ABLNO-V-104.000MHZ-T") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/ABLNO-V-104.000MHZ-T/ABLNO-V-104.000MHZ-T.kicad_sym") (options "") (descr ""))
+	(lib (name "T93") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/T93YA203JT20/KiCADv6/2026-11-08_23-41-02.kicad_sym") (options "") (descr ""))
+	(lib (name "ERA-6SM+") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/ERA-6SM_/ERA-6SM_.kicad_sym") (options "") (descr ""))
+)
