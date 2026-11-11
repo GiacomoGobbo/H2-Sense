@@ -1,0 +1,6 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "LDO_5V") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/Voltage Regulator/MCP1824T_ADJE_OT/KiCADv6/2026-11-09_18-12-39.kicad_sym") (options "") (descr ""))
+	(lib (name "LDO_3V3") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/Voltage Regulator/TLV70233DBVR/TLV70233DBVR.kicad_sym") (options "") (descr ""))
+	(lib (name "Buck_2CH") (type "KiCad") (uri "C:/Users/loren/Documents/KiCad/10.0/Imported Components/Voltage Regulator/MPM38222GR_Z/KiCADv6/2026-11-09_18-04-57.kicad_sym") (options "") (descr ""))
+)
