@@ -1,162 +1,162 @@
 # PCBprojects
 
-Raccolta di progetti hardware realizzati con KiCad.
+A collection of hardware projects designed with KiCad.
 
 ## SensorNode
 
-Sistema a radiofrequenza basato su un oscillatore con risonatore piezoacustico (SAW) a circa 110 MHz. Il segnale dell'oscillatore viene miscelato con un riferimento commerciale a 120 MHz. Il battimento risultante, a circa 10 MHz, viene filtrato e squadrato da un comparatore, così la sua frequenza può essere misurata digitalmente.
+A radio-frequency system built around an oscillator using a surface acoustic wave (SAW) resonator at about 110 MHz. The oscillator signal is mixed with a commercial 120 MHz reference. The resulting beat frequency, around 10 MHz, is filtered and squared up by a comparator so its frequency can be measured digitally.
 
-Il sistema è diviso in due schede: una scheda RF e una scheda di alimentazione (PowerBoard).
+The system is split into two boards: an RF board and a power board (PowerBoard).
 
-### Architettura
+### Architecture
 
 ```
-Batteria Li-ion 2S ──► PowerBoard ──► 3.3 V / 5 V ──► Scheda RF
+2S Li-ion battery ──► PowerBoard ──► 3.3 V / 5 V ──► RF board
 
-Scheda RF:
-  Oscillatore Pierce + SAW (~110 MHz) ──► porta IF ┐
-                                                   ├─ Mixer ──► Filtro (~10 MHz) ──► Comparatore ──► SMA_out
-  Oscillatore commerciale 120 MHz ─────► porta LO  ┘
+RF board:
+  Pierce oscillator + SAW (~110 MHz) ──► IF port ┐
+                                                 ├─ Mixer ──► Filter (~10 MHz) ──► Comparator ──► SMA_out
+  Commercial 120 MHz oscillator ──────► LO port  ┘
 ```
 
-### Struttura del repository
+### Repository structure
 
 ```
 PCBprojects/
 ├── .gitignore
 ├── README.md
 └── SensorNode/
-    └── PowerBoard/      Scheda di alimentazione (progetto KiCad)
+    └── PowerBoard/      Power supply board (KiCad project)
 ```
 
-La scheda RF verrà aggiunta in una sottocartella dedicata di `SensorNode/`.
+The RF board will be added in its own subfolder of `SensorNode/`.
 
 ---
 
 ## PowerBoard
 
-Scheda di alimentazione separata, che tiene i convertitori a commutazione fuori dalla scheda RF. È progettata per bassi consumi e, nella versione di test, permette di confrontare diverse configurazioni di regolazione.
+A separate power supply board that keeps the switching converters off the RF board. It is designed for low power consumption and, in the test version, allows different regulation configurations to be compared.
 
-### Ingresso
+### Input
 
-| Parametro | Valore |
+| Parameter | Value |
 |---|---|
-| Batteria | Li-ion 2S (6.0–8.4 V, nominale 7.4 V) |
-| Connettore | XT30, versione da PCB |
-| Protezioni | Inversione di polarità (P-MOSFET), fusibile, sottotensione (spegnimento a circa 6.0–6.2 V) |
+| Battery | 2S Li-ion (6.0–8.4 V, 7.4 V nominal) |
+| Connector | XT30, PCB-mount version |
+| Protection | Reverse polarity (P-MOSFET), fuse, undervoltage cutoff (around 6.0–6.2 V) |
 
-### Uscite
+### Outputs
 
-| Uscita | Carichi | Corrente stimata | Regolazione |
+| Output | Loads | Estimated current | Regulation |
 |---|---|---|---|
-| 3.3 V | Oscillatore 120 MHz, comparatore (lato 3.3 V) | ~45 mA | Buck + LDO TLV70233, oppure buck diretto |
-| 5 V | Comparatore (lato 5 V) | ~5 mA | Buck + LDO, oppure LDO da batteria |
-| −0.55 V (opzionale) | Gate del FET SKY65050 | ~10 µA | Charge pump invertente + operazionale invertente |
+| 3.3 V | 120 MHz oscillator, comparator (3.3 V side) | ~45 mA | Buck + TLV70233 LDO, or buck only |
+| 5 V | Comparator (5 V side) | ~5 mA | Buck + LDO, or LDO from battery |
+| −0.55 V (optional) | Gate of the SKY65050 FET | ~10 µA | Inverting charge pump + inverting op-amp |
 
-### Configurazioni di test
+### Test configurations
 
-La scheda di test permette di confrontare:
+The test board allows comparing:
 
-- **Buck + LDO oppure buck diretto:** selezione tramite resistenze da 0 Ω. La tensione d'uscita del buck va cambiata di conseguenza: circa 3.5–3.6 V con LDO, 3.3 V senza.
-- **Modalità PFM oppure PWM forzato:** ponticello sul pin MODE del buck.
-- **Filtro LC:** footprint configurabili, con un secondo stadio opzionale.
+- **Buck + LDO vs. buck only:** selected with 0 Ω resistors. The buck output voltage must be changed accordingly: about 3.5–3.6 V with the LDO, 3.3 V without it.
+- **PFM vs. forced PWM mode:** jumper on the buck MODE pin.
+- **LC filter:** configurable footprints, with an optional second stage.
 
-Sono previsti shunt per la misura dell'efficienza, punti di misura del ripple con massa corta e footprint per resistenze di carico di prova.
+The board includes shunts for efficiency measurements, ripple test points with short ground connections, and footprints for dummy load resistors.
 
-> **Nota sulla configurazione:** prima di collegare la scheda RF, verifica che la tensione del buck sia impostata correttamente per la configurazione scelta. In configurazione diretta, una tensione di 3.5 V finirebbe direttamente sulla scheda RF.
+> **Configuration note:** before connecting the RF board, check that the buck output voltage matches the selected configuration. In buck-only mode, a 3.5 V setting would go straight to the RF board.
 
-### Linea a −0.55 V
+### −0.55 V line
 
-La polarizzazione negativa del gate è opzionale. L'alternativa consigliata dal datasheet del SKY65050 è l'autopolarizzazione: una resistenza di source (27–47 Ω, con bypass RF) e il gate a 0 V in continua. Questa soluzione elimina la tensione negativa e la sequenza di accensione.
+Negative gate bias is optional. The alternative recommended in the SKY65050 datasheet is self-biasing: a source resistor (27–47 Ω, RF-bypassed) with the gate held at 0 V DC. This removes the need for a negative supply and for power sequencing.
 
-Se si usa la linea negativa:
+If the negative line is used:
 
-- la tensione di gate deve essere presente **prima** dell'alimentazione del drain, e deve essere tolta **dopo**;
-- la corrente di gate non deve superare 100 µA (valore massimo assoluto): serve una resistenza in serie di almeno 27–33 kΩ o un diodo di clamp;
-- il ripple della charge pump va filtrato con RC sull'alimentazione negativa dell'operazionale e sull'uscita.
+- the gate voltage must be applied **before** the drain supply and removed **after** it;
+- the gate current must not exceed 100 µA (absolute maximum): use a series resistor of at least 27–33 kΩ or a clamp diode;
+- the charge pump ripple must be filtered with RC networks on the op-amp negative supply and on the output.
 
-### Componenti
+### Components
 
-| Funzione | Componente | Stato |
+| Function | Part | Status |
 |---|---|---|
-| LDO 3.3 V | TI TLV70233 (SOT-23-5) | Scelto |
-| Buck 3.3 V / 5 V | — | Da definire (ingresso ≥ 9 V richiesto per la 2S) |
-| LDO 5 V | — | Da definire |
-| Charge pump invertente | — | Da definire |
-| Operazionale per −0.55 V | LT6003 | Candidato |
-| Connettore batteria | Amass XT30 (UPB o PW) | Scelto |
+| 3.3 V LDO | TI TLV70233 (SOT-23-5) | Selected |
+| 3.3 V / 5 V buck | — | TBD (input ≥ 9 V required for 2S) |
+| 5 V LDO | — | TBD |
+| Inverting charge pump | — | TBD |
+| Op-amp for −0.55 V | LT6003 | Candidate |
+| Battery connector | Amass XT30 (UPB or PW) | Selected |
 
 ---
 
-## Scheda RF
+## RF board
 
-| Blocco | Componente / note |
+| Block | Part / notes |
 |---|---|
-| Oscillatore a 110 MHz | Pierce con FET pHEMT SKY65050-372LF e risonatore SAW |
-| Oscillatore LO | Oscillatore commerciale a 120 MHz |
-| Mixer | 110 MHz sulla porta IF, 120 MHz sulla porta LO, uscita a ~10 MHz |
-| Filtro d'uscita | Passa-basso / passa-banda attorno a 10 MHz |
-| Comparatore | Alimentato a 5 V e 3.3 V, uscita su SMA_out |
+| 110 MHz oscillator | Pierce with SKY65050-372LF pHEMT and SAW resonator |
+| LO oscillator | Commercial 120 MHz oscillator |
+| Mixer | 110 MHz on the IF port, 120 MHz on the LO port, ~10 MHz output |
+| Output filter | Low-pass / band-pass around 10 MHz |
+| Comparator | Supplied from 5 V and 3.3 V, output on SMA_out |
 
-> **Nota:** il SKY65050-372LF risulta fuori produzione. Per nuove revisioni valutare un sostituto.
+> **Note:** the SKY65050-372LF is discontinued. Consider a replacement for future revisions.
 
-### Note di progetto
+### Design notes
 
-- Tenere i due oscillatori (110 e 120 MHz) fisicamente separati e alimentati da rami filtrati separatamente, per evitare trascinamento reciproco e spurie.
-- Il FET ha guadagno fino a diversi GHz: prevedere una resistenza in serie al gate o una ferrite sul drain contro le oscillazioni parassite, e verificare lo spettro fino ad alcuni GHz.
-- Ritorno DC del gate con resistenza elevata (100 kΩ – 1 MΩ), per non abbassare il Q del risonatore.
-- Condensatori C0G/NP0 per la rete di reazione del Pierce.
-- Piano di massa continuo sotto tutta la parte RF, con via di stitching e disaccoppiamento locale (100 nF + nF) su ogni integrato.
+- Keep the two oscillators (110 and 120 MHz) physically separated and powered from separately filtered branches to avoid mutual pulling and spurs.
+- The FET has gain up to several GHz: add a small series resistor on the gate or a ferrite bead on the drain to prevent parasitic oscillations, and check the spectrum up to a few GHz.
+- Use a high-value gate DC return (100 kΩ – 1 MΩ) to avoid lowering the resonator Q.
+- Use C0G/NP0 capacitors in the Pierce feedback network.
+- Continuous ground plane under the whole RF section, with stitching vias and local decoupling (100 nF + nF) on every IC.
 
 ---
 
-## Bilancio di potenza stimato
+## Estimated power budget
 
-| Voce | Potenza |
+| Item | Power |
 |---|---|
-| Oscillatore 120 MHz (3.3 V × 40 mA) | ~0.13 W |
-| Comparatore | ~0.04 W |
-| Oscillatore SAW con SKY65050 (~3 V × 10–20 mA) | ~0.03–0.06 W |
-| Perdite di regolazione | ~0.05–0.1 W |
+| 120 MHz oscillator (3.3 V × 40 mA) | ~0.13 W |
+| Comparator | ~0.04 W |
+| SAW oscillator with SKY65050 (~3 V × 10–20 mA) | ~0.03–0.06 W |
+| Regulation losses | ~0.05–0.1 W |
 
-Valori indicativi, da aggiornare con le misure sulla scheda di test.
+Indicative values, to be updated with measurements on the test board.
 
 ---
 
-## Lavorare sul progetto
+## Working on the project
 
-### Requisiti
+### Requirements
 
-- KiCad (indicare la versione usata dal gruppo: i file salvati con una versione più recente non si aprono con una più vecchia)
+- KiCad (state the version used by the team: files saved with a newer version cannot be opened with an older one)
 - Git
 
-### Clonare il repository
+### Cloning the repository
 
 ```
 git clone https://github.com/GiacomoGobbo/PCBprojects.git
 ```
 
-### Flusso di lavoro
+### Workflow
 
-1. Prima di iniziare: `git pull`.
-2. Lavorare sul progetto in KiCad.
-3. Alla fine:
+1. Before starting: `git pull`.
+2. Work on the project in KiCad.
+3. When done:
    ```
    git add .
-   git commit -m "Descrizione delle modifiche"
+   git commit -m "Description of the changes"
    git push
    ```
 
-### Regole
+### Rules
 
-- Non modificare lo stesso file `.kicad_sch` o `.kicad_pcb` in contemporanea: i conflitti sui file KiCad sono difficili da risolvere. Dividersi il lavoro per scheda o per foglio di schema.
-- Le librerie personali di simboli, footprint e modelli 3D vanno tenute nella cartella del progetto, con percorsi relativi (`${KIPRJMOD}`).
-- Il footprint XT30 si trova nella libreria ufficiale `Connector_AMASS`. Per lo schema si usa il simbolo `Conn_01x02`.
-- Non creare repository Git annidati nelle sottocartelle dei progetti.
-- Il `.gitignore` nella cartella principale esclude backup, autosalvataggi, cache, file di lock, preferenze locali (`.kicad_prl`) e la cronologia locale di KiCad (`.history/`).
+- Do not edit the same `.kicad_sch` or `.kicad_pcb` file at the same time: conflicts in KiCad files are hard to resolve. Split the work by board or by schematic sheet.
+- Keep custom symbol, footprint and 3D model libraries inside the project folder, using relative paths (`${KIPRJMOD}`).
+- The XT30 footprint is in the official `Connector_AMASS` library. Use the `Conn_01x02` symbol in the schematic.
+- Do not create nested Git repositories inside project subfolders.
+- The `.gitignore` in the root folder excludes backups, autosaves, caches, lock files, local preferences (`.kicad_prl`) and KiCad's local history (`.history/`).
 
 ---
 
-## Autori
+## Authors
 
 - Giacomo Gobbo
