@@ -41,7 +41,8 @@ A separate power supply board that keeps the switching converters off the RF boa
 
 <img width="1687" height="1034" alt="image" src="https://github.com/user-attachments/assets/64591558-ee47-464e-916d-191fe06c030d" />
 
-<img width="1209" height="757" alt="image" src="https://github.com/user-attachments/assets/dfa53a31-b76b-4d82-a2b8-f6d77852a0ec" />
+<img width="1230" height="788" alt="image" src="https://github.com/user-attachments/assets/f63ee4ef-0528-451a-893c-0267b0286931" />
+
 
 ### Block diagram
 
