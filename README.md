@@ -6,7 +6,7 @@ KiCad hardware projects for a battery-powered hydrogen (H2) sensor node.
  
 The sensor node detects hydrogen using a surface acoustic wave (SAW) resonator as the sensing element. The resonator sets the frequency of an oscillator at about 110 MHz, and exposure to hydrogen shifts that frequency. The amount of shift indicates the H2 concentration.
  
-To make the shift easy to measure, the 110 MHz signal is mixed with a stable commercial 120 MHz reference. The resulting beat frequency, around 10 MHz, is filtered and squared up by a comparator. Its frequency can then be counted digitally, and any change in it follows the change in the sensor frequency.
+To make the shift easy to measure, the 110 MHz signal (or lower, dipends on the device to measure) is mixed with a stable commercial 120 MHz (or 104MHz depending on the device to measure) reference. The resulting beat frequency, lower then 10 MHz, is filtered and squared up by a comparator. Its frequency can then be counted digitally, and any change in it follows the change in the sensor frequency.
  
 Because the measurement relies on small frequency shifts, the stability and spectral purity of both oscillators are central to the design. This drives most of the choices on both boards: low-noise post-regulation, separate filtered supply branches, and keeping the switching converters off the RF board.
 
