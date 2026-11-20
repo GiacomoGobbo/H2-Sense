@@ -103,6 +103,8 @@ EN1 and EN2 are pulled up to Vin through R1 and R2 (100 kΩ). Output capacitors:
 |---|---|---|---|
 | 3V3 | U1, LDO 3.3 V (TLV70233, SOT-23-5) | Buck_3V5 | C6 = 1 µF in, C5 = 1 µF out |
 | 5V | U2, LDO 5 V | Buck_5V3 | C7 = 2.2 µF in, C4 = 1 µF out |
+| -0.55V | U5, OpAmp | Buck_5V3 | Cf = 1 µF in, C35 = 0.1 µF out |
+| 0.5V | U5, OpAmp | Buck_5V3 | Cf = 1 µF in, C33 = 0.1 µF out |
 
 The bucks run about 0.2–0.3 V above the LDO outputs, so the LDOs dissipate very little while filtering the switching ripple.
 
