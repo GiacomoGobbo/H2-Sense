@@ -39,9 +39,10 @@ The RF board will be added in its own subfolder of `SensorNode/`.
 
 A separate power supply board that keeps the switching converters off the RF board. It is a test board: it provides footprints for two alternative buck converters, low-noise post-regulation with LDOs, a negative gate bias line, and adjustable test loads.
 
-<img width="1290" height="830" alt="image" src="https://github.com/user-attachments/assets/d8f60855-03ac-410e-b7c3-5cefeb9f2e73" />
+<img width="1158" height="797" alt="image" src="https://github.com/user-attachments/assets/906473ed-dc5c-4b74-ae58-934b50d4142d" />
 
-<img width="1301" height="851" alt="image" src="https://github.com/user-attachments/assets/16ca4111-077e-49a3-bfcb-590d07fb7b9e" />
+<img width="1288" height="753" alt="image" src="https://github.com/user-attachments/assets/dcef96c4-8d7e-4a1b-9398-55946b6315c7" />
+
 
 ### Block diagram
 
