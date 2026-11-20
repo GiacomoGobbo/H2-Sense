@@ -136,6 +136,7 @@ If the negative line is used on the RF board:
 | J4 (3-pin header) | 5V, 3V3, GND |
 | J3 | 5V |
 | J2 | −0.55 V (Vg) |
+| J6 | 0.5 V (V_heater) |
 
 ### Test loads
 
@@ -144,31 +145,9 @@ If the negative line is used on the RF board:
 | 5V | R13 (0 Ω) + R11 (20 kΩ trimmer, rheostat) | Adjustable load to GND |
 | 3V3 | R14 (0 Ω) + R10 (20 kΩ trimmer, rheostat) | Adjustable load to GND |
 | −0.55 V | R15 (0 Ω) + R18 (232 kΩ) | Fixed load, about 2.4 µA |
+| 0.5 V | none | No test load for heaters power supply |
 
 The 0 Ω resistors disconnect each test load when not mounted.
-
-### Bill of main components
-
-| Ref | Part | Function |
-|---|---|---|
-| U1 | TI TLV70233 | 3.3 V LDO |
-| U2 | 5 V LDO (TBD) | 5 V LDO |
-| U3 | Dual buck module, VFB = 0.608 V (TBD) | Buck for inputs up to 6 V |
-| U4 | Microchip TC7660EOA713 | Inverting charge pump |
-| U5 | TI OPA191IDR | Gate bias op-amp |
-| U6 | ADI LTC3607EMSE#PBF | Dual buck, 4.5–15 V |
-| R10, R11, R12 | Vishay T93YA203JT20 | 20 kΩ trimmers |
-| J1 | Amass XT30 (PCB version) | Battery connector |
-
-### Known issues / TODO
-
-- [ ] **LTC3607 feedback dividers:** in the current schematic the `Vfb1` / `Vfb2` labels are on the bottom end of R21 / R22, which is not connected to GND. The divider midpoint must go to VFB, and the bottom of R21 / R22 must go to GND. As drawn, the outputs would not regulate correctly.
-- [ ] **Gate bias output:** add a series resistor (≥ 27–33 kΩ) between U5 OUT and J2 to limit the gate current and isolate the op-amp from capacitive loads, plus an RC filter at the output.
-- [ ] **Test loads:** the 20 kΩ trimmers can be turned down to 0 Ω, shorting the rail. Replace R13 / R14 with fixed resistors (for example 68 Ω on 3V3 and 100 Ω on 5V) to limit the maximum current and the trimmer dissipation.
-- [ ] **−0.55 V test load:** R18 = 232 kΩ draws about 2.4 µA. Use about 55 kΩ to emulate the expected 10 µA.
-- [ ] **Input protection:** no reverse-polarity protection, fuse or undervoltage cutoff yet. A 2S Li-ion battery needs an undervoltage cutoff around 6.0–6.2 V (for example a divider on the RUN pins of U6, or a BMS).
-- [ ] **Switching frequency:** the LTC3607 switches at about 2.25 MHz, and its 5th harmonic (11.25 MHz) is close to the 10 MHz IF. Check the spurs at the IF output with the RF board connected.
-- [ ] Choose U2 and U3.
 
 ---
 
@@ -176,9 +155,9 @@ The 0 Ω resistors disconnect each test load when not mounted.
 
 | Block | Part / notes |
 |---|---|
-| 110 MHz oscillator | Pierce with SKY65050-372LF pHEMT and SAW resonator |
+| 104 MHz oscillator | Pierce with SKY65050-372LF pHEMT and SAW resonator |
 | LO oscillator | Commercial 120 MHz oscillator |
-| Mixer | 110 MHz on the IF port, 120 MHz on the LO port, ~10 MHz output |
+| Mixer | 104 MHz on the IF port, 103 MHz on the LO port, ~1 MHz output |
 | Output filter | Low-pass / band-pass around 10 MHz |
 | Comparator | Supplied from 5 V and 3.3 V, output on SMA_out |
 
@@ -186,7 +165,7 @@ The 0 Ω resistors disconnect each test load when not mounted.
 
 ### Design notes
 
-- Keep the two oscillators (110 and 120 MHz) physically separated and powered from separately filtered branches to avoid mutual pulling and spurs.
+- Keep the commercial oscillator physically separated from the comparator section and powered separately with filts to avoid mutual pulling and spurs.
 - The FET has gain up to several GHz: add a small series resistor on the gate or a ferrite bead on the drain to prevent parasitic oscillations, and check the spectrum up to a few GHz.
 - Use a high-value gate DC return (100 kΩ – 1 MΩ) to avoid lowering the resonator Q.
 - Use C0G/NP0 capacitors in the Pierce feedback network.
